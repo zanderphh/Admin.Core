@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using Admin.Core.Model.Output;
+using Admin.Core.Common.Output;
 using Admin.Core.Service.Admin.OprationLog;
 using Admin.Core.Service.Admin.OprationLog.Input;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -30,9 +30,7 @@ namespace Admin.Core.Logs
         {
             var sw = new Stopwatch();
             sw.Start();
-
             dynamic actionResult = (await next()).Result;
-
             sw.Stop();
 
             //操作参数

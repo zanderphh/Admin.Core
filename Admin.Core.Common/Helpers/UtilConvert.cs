@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace Admin.Core
+namespace Admin.Core.Common.Helpers
 {
     /// <summary>
     /// 数据类型转换
@@ -69,7 +69,26 @@ namespace Admin.Core
             if (thisValue != null) return thisValue.ToString().Trim();
             return errorValue;
         }
-        
+
+        /// <summary>
+        /// 转换成Double/Single
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="digits">小数位数</param>
+        /// <returns></returns>
+        public static double ToDouble(this object s, int? digits = null)
+        {
+            if (s == null || s == DBNull.Value)
+                return 0d;
+
+            double.TryParse(s.ToString(), out double result);
+
+            if (digits == null)
+                return result;
+
+            return Math.Round(result, digits.Value);
+        }
+
         public static decimal ToDecimal(this object thisValue)
         {
             decimal reval;
@@ -90,7 +109,7 @@ namespace Admin.Core
             return errorValue;
         }
         
-        public static DateTime ToDate(this object thisValue)
+        public static DateTime ToDateTime(this object thisValue)
         {
             DateTime reval = DateTime.MinValue;
             if (thisValue != null && thisValue != DBNull.Value && DateTime.TryParse(thisValue.ToString(), out reval))
@@ -100,7 +119,7 @@ namespace Admin.Core
             return reval;
         }
         
-        public static DateTime ToDate(this object thisValue, DateTime errorValue)
+        public static DateTime ToDateTime(this object thisValue, DateTime errorValue)
         {
             DateTime reval;
             if (thisValue != null && thisValue != DBNull.Value && DateTime.TryParse(thisValue.ToString(), out reval))
@@ -109,7 +128,12 @@ namespace Admin.Core
             }
             return errorValue;
         }
-        
+
+        public static DateTime ToDateTime(this long milliseconds)
+        {
+            return Extensions.DateTimeExtensions.TimestampStart.AddMilliseconds(milliseconds);
+        }
+
         public static bool ToBool(this object thisValue)
         {
             bool reval = false;

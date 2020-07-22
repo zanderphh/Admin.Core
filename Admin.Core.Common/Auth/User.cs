@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Admin.Core.Common.Helpers;
 
 namespace Admin.Core.Common.Auth
 {
@@ -17,7 +18,7 @@ namespace Admin.Core.Common.Auth
         /// <summary>
         /// 用户Id
         /// </summary>
-        public long Id
+        public virtual long Id
         {
             get
             {
@@ -49,13 +50,13 @@ namespace Admin.Core.Common.Auth
         }
 
         /// <summary>
-        /// 姓名
+        /// 昵称
         /// </summary>
-        public string RealName
+        public string NickName
         {
             get
             {
-                var name = _accessor?.HttpContext?.User?.FindFirst(ClaimAttributes.UserRealName);
+                var name = _accessor?.HttpContext?.User?.FindFirst(ClaimAttributes.UserNickName);
 
                 if (name != null && name.Value.NotNull())
                 {
@@ -65,31 +66,5 @@ namespace Admin.Core.Common.Auth
                 return "";
             }
         }
-    }
-
-    /// <summary>
-    /// Claim属性
-    /// </summary>
-    public static class ClaimAttributes
-    {
-        /// <summary>
-        /// 用户Id
-        /// </summary>
-        public const string UserId = "id";
-
-        /// <summary>
-        /// 用户名
-        /// </summary>
-        public const string UserName = "na";
-
-        /// <summary>
-        /// 姓名
-        /// </summary>
-        public const string UserRealName = "rna";
-
-        /// <summary>
-        /// 登录日志Id
-        /// </summary>
-        public const string UserLoginLogId = "llid";
     }
 }

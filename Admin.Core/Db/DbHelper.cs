@@ -63,7 +63,7 @@ namespace Admin.Core.Db
 
             // 同步结构
             var dbType = dbConfig.Type.ToString();
-            Console.WriteLine($"\r\n{(msg.NotNull() ? msg : $"sync {dbType} structure")} started");
+            Console.WriteLine($"{(msg.NotNull() ? msg : $"sync {dbType} structure")} started");
             if(dbConfig.Type == DataType.Oracle)
             {
                 db.CodeFirst.IsSyncStructureToUpper = true;
@@ -79,7 +79,9 @@ namespace Admin.Core.Db
                 typeof(UserRoleEntity),
                 typeof(RolePermissionEntity),
                 typeof(OprationLogEntity),
-                typeof(LoginLogEntity)
+                typeof(LoginLogEntity),
+                typeof(DocumentEntity),
+                typeof(DocumentImageEntity)
             });
             Console.WriteLine($"{(msg.NotNull() ? msg : $"sync {dbType} structure")} succeed\r\n");
         }
@@ -159,7 +161,7 @@ namespace Admin.Core.Db
                         e.Value = 2;
                         break;
                     case "CreatedUserName":
-                        e.Value = "xiaoxue";
+                        e.Value = "admin";
                         break;
                 }
             }
@@ -171,7 +173,7 @@ namespace Admin.Core.Db
                         e.Value = 2;
                         break;
                     case "ModifiedUserName":
-                        e.Value = "xiaoxue";
+                        e.Value = "admin";
                         break;
                 }
             }
@@ -190,11 +192,11 @@ namespace Admin.Core.Db
                 //    Console.WriteLine($"{e.Sql}\r\n");
                 //};
 
-                Console.WriteLine("\r\nsync data started");
+                Console.WriteLine("sync data started");
 
                 db.Aop.AuditValue += SyncDataAuditValue;
-
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"Db\Data\data.json");
+               
+                var filePath = Path.Combine(AppContext.BaseDirectory, "Db/Data/data.json").ToPath();
                 var jsonData = FileHelper.ReadFile(filePath);
                 var data = JsonConvert.DeserializeObject<Data>(jsonData);
 
@@ -282,6 +284,7 @@ namespace Admin.Core.Db
                     a.Id,
                     a.ParentId,
                     a.Label,
+                    a.Code,
                     a.Type,
                     a.ViewId,
                     a.ApiId,
@@ -302,7 +305,6 @@ namespace Admin.Core.Db
                     a.Id,
                     a.UserName,
                     a.Password,
-                    a.Name,
                     a.NickName,
                     a.Avatar,
                     a.Status,
@@ -364,7 +366,7 @@ namespace Admin.Core.Db
                 //Formatting.Indented, 
                 settings
                 );
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"Db\Data\data.json");
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Db/Data/data.json").ToPath();
                 FileHelper.WriteFile(filePath, jsonData);
                 #endregion
 
